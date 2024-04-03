@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,100' rel='stylesheet' type='text/css'>
+  <title>project</title>
+  <!-- <link rel="stylesheet" href="/static/login.css" /> -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+
+  <!-- <script>
+    $(document).ready(function() {
+        $(".signup button").on("click", function () {
+            // Redirect to ind.html
+            window.location.href = "{{ url_for('mult_image') }}";
+            // window.location.href = "/multImag.html";
+        });
+    });
+</script> -->
+  <!-- <script>
+  // Function to clear form fields
+  function clearForm() {
+      document.getElementById("username").value = "";
+      document.getElementById("email").value = "";
+      document.getElementById("fullname").value = "";
+      document.getElementById("password").value = "";
+  }
+
+  // Call the clearForm function when the page is loaded or reloaded
+  window.onload = clearForm;
+</script> -->
+
+
+
+</head>
+
+<body>
+  <!-- {% if error_message %}
+  <p style="color: red;">{{ error }}</p>
+  {% endif %} -->
+
+
+  <div class="video-container">
+    <video autoplay loop muted id="background-video">
+      <source src="/static/circ.mp4" type="video/mp4">
+    </video>
+    <div class="container">
+      <div class="backbox">
+        <div class="loginMsg">
+          <div class="textcontent">
+            <p class="title">Don't have an account?</p>
+            <p>Sign up to create your Account.</p>
+            <button id="switch1">SIGN UP</button>
+          </div>
+        </div>
+        <div class="signupMsg visibility">
+          <div class="textcontent">
+            <p class="title">Have an account?</p>
+            <p>Log in to see all your collection.</p>
+
+            <button id="switch2">LOG IN</button>
+          </div>
+        </div>
+      </div>
+      <!-- backbox -->
+      <div class="frontbox">
+        <div class="login">
+          <h2>LOG IN</h2>
+          {% if error_msg %}
+          <p style="color: red;font-size: 20px;margin-top: 2px;">{{ error_msg }}</p>
+          {% endif %}
+          <form id="loginForm" method="post" action="{{ url_for('login') }}">
+            <div class="inputbox">
+              <input type="text" name="username" placeholder="  USERNAME">
+              <input type="password" name="password" placeholder="  PASSWORD">
+            </div>
+            <!-- <p>FORGOT PASSWORD?</p> -->
+            <!-- <button>LOG IN</button> -->
+            <!-- Add this code snippet to index.html -->
+            <a href="{{ url_for('login') }}"><button>LOG IN</button> </a>
+          </form>
+
+          <div class="loginSuccessMsg"></div>
+        </div>
+        <div class="signup hide">
+          <h2>SIGN UP</h2>
+          {% if error %}
+          <p style="color: red;font-size: 10px;">{{ error }}</p>
+          {% endif %}
+
+
+          <form id="signupForm" method="post" action="/signup">
+            <div class="inputbox">
+              <input type="text" name="username" placeholder="  USERNAME" >
+              <input type="email" name="email" placeholder="  EMAIL" >
+              <input type="text" name="fullname" placeholder="  FULLNAME">
+              <input type="password" name="password" placeholder="  PASSWORD">
+            </div>
+            <a href="{{ url_for('signup') }}"><button>SUBMIT</button> </a>
+          </form>
+
+          <!-- Add this code snippet to index.html -->
+          <!-- <a href="{{ url_for('mult_image') }}">Go to Mult Image Page</a> -->
+
+        </div>
+      </div>
+      <!-- frontbox -->
+    </div>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script> -->
+  </div>
+
+  <script src="{{ url_for('static', filename='login.js') }}"></script>
+</body>
+
+</html>

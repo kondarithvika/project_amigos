@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="/static/video.css" />
+
+   <title>Create Video</title>
+   <style>
+      /* .btns {
+         display: flex;
+         justify-content: space-evenly;
+         align-items: center;
+         border :2px solid white;
+      } */
+      body {
+         margin: 0;
+         padding: 0;
+         font-family: Arial, sans-serif;
+         background-color: #3498db;
+      }
+
+
+      #video-container {
+         display: flex;
+         position: relative;
+         justify-content: center;
+         align-items: center;
+         max-width: 600px;
+         margin: 0 auto;
+         top: 70px;
+         margin-top: 20px;
+         /* Adjust as needed */
+         right: 100px;
+      }
+
+      .outoflog {
+         right: 300px;
+         top: 10px;
+      }
+
+      #video-container video {
+         width: 100%;
+         height: auto;
+         max-width: 100%;
+         margin-bottom: 100px;
+      }
+
+
+      #prev_id {
+         text-align: center;
+      }
+
+      .controls {
+         display: flex;
+         justify-content: center;
+         margin-top: 10px;
+      }
+
+      .controls button {
+         background-color: #3498db;
+         color: white;
+         border: none;
+         border-radius: 5px;
+         cursor: pointer;
+         font-size: 18px;
+         margin: 0 10px;
+         border-color: white;
+         border: 1px solid white;
+      }
+
+      .controls button:hover {
+         background-color: #1d618f;
+         transition: 1s;
+      }
+
+      audio {
+         display: block;
+         margin: 10px auto;
+         max-width: 600px;
+      }
+
+      .logout {
+         align-items: right;
+         margin-top: 0px;
+         left: 250px;
+         background-color: red;
+         padding: 10px;
+         cursor: pointer;
+      }
+
+      #audioFileInput {
+         display: none;
+      }
+
+      #ntright {
+         position: absolute;
+         right: 10px;
+         top: 10px;
+         padding: 15px;
+         /* margin-top: 0px; */
+      }
+
+
+      .logout {
+         padding: 7px;
+         background-color: #1d618f;
+         color: white;
+         border-radius: 5px;
+      }
+
+      .bor {
+         border: 2px solid transparent;
+         padding: 2px;
+         transition: border-color 0.3s ease;
+      }
+
+      /* Hover effect */
+      .bor:hover {
+         padding: 5px;
+         border-color: white;
+         cursor: pointer;
+         font-size: 20px;
+         transition: 0.5s;
+         color: rgb(234, 234, 244);
+         font-weight: bold;
+      }
+
+      .image-grid {
+         height: 400px;
+         width: 400px;
+
+      }
+
+      .image-grid img {
+         cursor: pointer;
+         background-color: #101c24;
+         height: 40px;
+         width: 40px;
+      }
+
+      #ntright :hover {
+         cursor: pointer;
+      }
+
+      /* Individual navigation items */
+      .bor {
+         border: 2px solid transparent;
+         padding: 2px;
+         transition: border-color 0.3s ease;
+      }
+
+      /* Hover effect */
+      .bor:hover {
+         padding: 5px;
+         border-color: white;
+         cursor: pointer;
+         font-size: 20px;
+         transition: 0.5s;
+         color: rgb(234, 234, 244);
+         font-weight: bold;
+      }
+
+      .rad1 {
+         border-radius: 10px;
+         background-color: skyblue;
+      }
+
+      /* .btn{
+         margin-top: 150px;
+      }
+      .btn {
+         color: white;
+         padding: 10px 15px;
+         border: none;
+         border-radius: 5px;
+         cursor: pointer;
+         background-color: #3498db;
+         border: 1px solid white;
+         border-color: white;
+      } */
+
+      #addAudioButton:hover {
+         background-color: #1d618f;
+         transition: 1s;
+      }
+
+      #addAudioButton {
+         color: white;
+         padding: 10px 15px;
+         border: none;
+         border-radius: 5px;
+         cursor: pointer;
+         background-color: #3498db;
+         border: 1px solid white;
+         border-color: white;
+      }
+
+      #download:hover {
+         background-color: #1d618f;
+         transition: 1s;
+      }
+
+      #download {
+         color: white;
+         padding: 10px 15px;
+         border: none;
+         border-radius: 5px;
+         cursor: pointer;
+         background-color: #3498db;
+         border: 1px solid white;
+         border-color: white;
+      }
+
+      .audio-item.selected {
+         opacity: 0.5;
+         /* Change opacity to make it dull */
+      }
+
+      ul {
+         list-style: none;
+      }
+
+      /* ...........................1 */
+   </style>
+</head>
+
+<body style="background-color: #3498db;">
+
+   <div class="main">
+
+      <div class="logindiv">
+         <a id="ntright" href="{{ url_for('logout_and_delete') }}">
+            <button class='logout'>LOG OUT</button>
+         </a>
+      </div>
+      <div class="outoflog">
+      </div>
+      <div class="main-container">
+         <div class="audios-container">
+            <div id="audio-list">
+               <button class="audio-item rad1">
+                  <audio controls>
+                     <source src="static/downloaded_audios/audio_1.mp3" type="audio/mpeg">
+                     Your browser does not support the audio element.
+                  </audio>
+               </button>
+               <button class="audio-item rad1">
+                  <audio controls>
+                     <source src="static/downloaded_audios/audio_2.mp3" type="audio/mpeg">
+                     Your browser does not support the audio element.
+                  </audio>
+               </button>
+               <button class="audio-item rad1">
+                  <audio controls>
+                     <source src="static/downloaded_audios/audio_3.mp3" type="audio/mpeg">
+                     Your browser does not support the audio element.
+                  </audio>
+               </button>
+               <button class="audio-item rad1">
+                  <audio controls>
+                     <source src="static/downloaded_audios/audio_4.mp3" type="audio/mpeg">
+                     Your browser does not support the audio element.
+                  </audio>
+               </button>
+               <button class="audio-item rad1">
+                  <audio controls>
+                     <source src="static/downloaded_audios/audio_5.mp3" type="audio/mpeg">
+                     Your browser does not support the audio element.
+                  </audio>
+               </button>
+            </div>
+            <button id="addAudioButton">Add Selected Audio to Video</button>
+
+         </div>
+         <div id="video-container">
+            <video controls>
+               <source src="{{ url_for('static', filename=video_path) }}" type="video/mp4">
+               Your browser does not support the video tag.
+            </video>
+         </div>
+         <div id="audio_video-container">
+            <!-- ............................ -->
+            <!-- <video controls>
+               <source src="/static/merged_video.mp4" type="video/mp4">
+            </video> -->
+         </div>
+         <a href="/static/merged_video.mp4" download>
+            <button id="download">Download Video</button>
+         </a>
+      </div>
+   </div>
+
+   <script>
+      document.addEventListener("DOMContentLoaded", ()=>{
+         fetch_video();
+         console.log("....############3%%%%%%%%%%%%%%!!!!!!!!!!");
+         // display_audio_inserted();
+         console.log(".[[[[]]]]");
+
+      });
+   // });
+      // function display_audio_inserted(){
+      //    let xx=document.querySelector("#addAudioButton");
+      //    xx.addEventListener("click", function () {
+         
+         //       mainVideo.style.display = "none";
+         //       // audioVideo.style.src = '/static/merged_video.mp4'
+         //       audioVideo.style.display = "block";
+         //       console.log("blocked.........");
+         //    });
+         // }
+         
+         function displayMergedVideo(mergedVideoPath) {
+            var mainVideo = document.getElementById("video-container");
+            var audioVideo = document.getElementById("audio_video-container");
+            // Clear any existing content in the audio video container
+            audioVideo.innerHTML = '';
+             // Create a new video element
+            var videoElement = document.createElement('video');
+            // videoElement.id = 'mergedVideo'; // Set the ID of the video element
+            videoElement.src = mergedVideoPath; // Set the source of the video element
+            videoElement.controls = true; // Add controls to the video element
+
+            // Append the video element to the audio video container
+            audioVideo.appendChild(videoElement);
+
+            audioVideo.style.display = "block";
+            mainVideo.style.display = "none";
+            console.log(audioVideo.style.src);
+            
+            // audioVideo.style.src="/static/merged_video.mp4"
+            // audioVideo.style.display = "block";
+            // mainVideo.style.display = "none";
+            // console.log(audioVideo.style.src);
+            // Update the source of the merged video
+            // document.getElementById("mergedVideo").src = mergedVideoPath;
+            // Display the merged video
+            // var mergedVideo = document.getElementById("merged_video-container");
+         }
+
+      function fetch_video() {
+         const audioItems = document.querySelectorAll(".audio-item");
+
+         audioItems.forEach(function (item) {
+            item.addEventListener("click", function () {
+               // Deselect all other audio items
+               audioItems.forEach(function (otherItem) {
+                  otherItem.classList.remove("selected");
+               });
+
+               // Select the clicked audio item
+               item.classList.add("selected");
+            });
+         });
+
+         const addAudioButton = document.getElementById("addAudioButton");
+         addAudioButton.addEventListener("click", function () {
+            const selectedAudio = document.querySelector(".audio-item.selected audio source").getAttribute("src");
+            // Send selected audio to Flask using Ajax
+            // Example:
+            fetch('/get_audio_path', {
+               method: 'POST',
+               headers: {
+                  'Content-Type': 'application/json',
+               },
+               body: JSON.stringify({ audioSrc: selectedAudio }),
+            })
+               .then(response => response.json())
+               .then(data => {
+                  console.log('Success:', data);
+                  console.log("done inserting audio..........");
+                  // Handle success response
+                  displayMergedVideo(data.merged_video_path);
+
+               })
+               .catch((error) => {
+                  console.error('Error:', error);
+                  // Handle error
+               });
+         });
+         // if (mainVideo.style.display === "block") {
+      };
+
+
+      function togglePlayPause() {
+         if (video.paused || video.ended) {
+            video.play();
+         } else {
+            video.pause();
+         }
+      }
+
+      function rewind() {
+         video.currentTime -= 10;
+      }
+
+      function loadAudio(input) {
+         const file = input.files[0];
+         const objectURL = URL.createObjectURL(file);
+         audioPlayer.src = objectURL;
+         audioPlayer.load(); // Ensure audio metadata is loaded
+      }
+
+      function showImages() {
+         let imageGrid = document.querySelector(".image-grid");
+         // Simulate loading images dynamically
+         imageGrid.style.display = "block";
+         // let imageContainer = document.getElementById("imageContainer");
+         // imageContainer.innerHTML = ""; // Clear existing images
+
+         fetch("/get_selected_images")
+            .then(response => {
+               if (!response.ok) {
+                  throw new Error(`HTTP error! Status: ${ response.status }`);
+               }
+               return response.text();
+            })
+            .then(imageNames => {
+               if (imageNames.trim() === '') {
+                  throw new Error('Empty response. No image names received.');
+               }
+
+               const images = imageNames.split('\n').map(name => name.trim());
+
+               // Clear existing images in imageGrid
+               // imageGrid.innerHTML = "";
+
+               images.forEach(imageName => {
+                  let img = document.createElement("img");
+                  img.src =`/static/selected_images/${imageName}`;  // Correct the path to images
+                  imageGrid.appendChild(img);
+               });
+            })
+            .catch(error => console.error("Error fetching or processing images:", error));
+         console.log("Done....");
+      }
+
+      // Automatically call showImages when the page loads
+      window.addEventListener('load', showImages);
+   </script>
+</body>
+
+</html>

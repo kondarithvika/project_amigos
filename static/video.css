@@ -1,0 +1,37 @@
+.image-grid {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: flex-start;
+   max-width: 500px;
+}
+.image-item {
+   width: 200px;
+}
+img {
+   width: 120px;
+   height: 120px;
+   margin: 10px;
+   border-radius: 10px;
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+img:hover {
+   transform: scale(1.04);
+   box-shadow: 3px 5px 6px rgba(1, 1, 1, 0.3);
+   transition: 0.2s ease-in-out all;
+   border-radius: 20px;
+}
+.main {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+}
+.preview, .options, .video {
+   flex: 1;
+   margin: 10px;
+   padding: 20px;
+}
+@media screen and (max-width: 730px) {
+   #myVideo{
+      width:200px;
+   }
+}

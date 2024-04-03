@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Upload Multiple Images</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .upload-container {
+            text-align: center;
+            padding: 20px;
+            cursor: pointer;
+        }
+
+        .upload-label {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .image-previews img {
+            max-width: 100px;
+            max-height: 100px;
+            margin: 5px;
+        }
+
+        #image-preview {
+            position: absolute;
+            width: 50%;
+            top: 150px;
+            left: 40px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .preview-image {
+            width: 150px;
+            height: 150px;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+        }
+
+        .preview-image:hover {
+            transform: scale(1.04);
+            box-shadow: 3px 5px 6px rgba(1, 1, 1, 0.3);
+            transition: 0.2s ease-in-out all;
+            border-radius: 20px;
+        }
+
+        #upload-input {
+            display: none;
+        }
+
+        #upload-button {
+            background-color: #3498db;
+            color: white;
+            padding: 20px 25px;
+            border: none;
+            /* border-radius: 50px; */
+            cursor: pointer;
+            position: absolute;
+            top: 30px;
+            left: 55px;
+        }
+
+        #finalUpload {
+            margin-left: 60px;
+            background-color: #3498db;
+            color: white;
+            padding: 20px 25px;
+            border: none;
+            /* border-radius: 50px; */
+            cursor: pointer;
+            position: absolute;
+            top: 80px;
+            left: 220px;
+        }
+
+        .bx {
+            font-size: larger;
+
+        }
+
+        #finalUpload:hover {
+            background-color: #1d618f;
+        }
+
+        #upload-button:hover {
+            background-color: #1d618f;
+        }
+
+        #create-video-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            position: fixed;
+            top: 45%;
+            right: 300px;
+            animation: glowAnimation 2s ease-in-out infinite alternate, blinkAnimation 1s infinite;
+        }
+
+        #create-video-btn:hover {
+            background-color: #1d618f;
+            animation: none;
+        }
+
+        #he4 {
+            position: fixed;
+            top: 43%;
+            right: 200px;
+        }
+
+        @media screen and (max-width: 800px) {
+            #he4 {
+                margin-left: 0px;
+                top: 1.5%;
+            }
+
+            #upload-button {
+                margin-top: 60px;
+            }
+
+            #create-video-btn {
+                margin-left: 20px;
+                top: 2%;
+            }
+
+            #upload-button {
+                width: 90px;
+                margin-left: 2px;
+            }
+
+            #upload-button pre {
+                font-size: 12px;
+            }
+
+            #image-preview {
+                margin-top: 60px;
+            }
+
+            #image-preview img {
+
+                max-width: 50px;
+                max-height: 50px;
+            }
+        }
+
+        @keyframes glowAnimation {
+            0% {
+                box-shadow: 0 0 10px #3498db;
+            }
+
+            100% {
+                box-shadow: 0 0 20px #3498db;
+            }
+        }
+
+        @keyframes blinkAnimation {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.8;
+            }
+        }
+
+        #ntright {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            padding: 15px;
+            /* margin-top: 0px; */
+        }
+
+        .logout {
+            padding: 7px;
+            background-color: #1d618f;
+            color: white;
+            border-radius: 5px;
+        }
+
+        #ntright :hover {
+            cursor: pointer;
+        }
+
+        #image-preview-container {
+            position: fixed;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 90%;
+            /* Adjust max-width as needed */
+            max-height: 50%;
+            /* Adjust max-height as needed */
+            overflow-y: auto;
+            background-color: #4fc5e2;
+            /* Adjust background color and opacity */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+
+<!-- Your HTML form code (index.html) -->
+
+<body
+    style="position: relative; overflow: hidden; background-image:url('/static/images/upload_back.jpeg');background-size: cover;">
+
+    <div class="logindiv">
+        <a id="ntright" href="{{ url_for('logout_and_delete') }}">
+            <button class='logout'>LOG OUT</button>
+        </a>
+    </div>
+    <form method="POST" enctype="multipart/form-data" id="upload-form">
+        <label for="upload-input" id="upload-button" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <i class='bx bx-plus-circle'> Browse</i>
+            <p style="color: black; font-weight: bold;"> (Drag here)</p>
+        </label>
+
+        <input type="file" id="upload-input" name="image" accept="image/*" multiple onchange="handleFileSelect(this)">
+        <button type="button" id="finalUpload" onclick="uploadFilesToFlask()">SAVE</button>
+    </form>
+    <div id="image-preview-container"></div>
+
+    <!-- <a href="{{ url_for('video') }}">
+        <button id="create-video-btn"><i class='bx bxs-video-plus'></i></button>
+    </a> -->
+
+    <!-- <h4 id="he4">Upload Images</h4> -->
+
+    <!-- Display flashed messages -->
+    <!-- {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div>
+        {% for message in messages %}
+        <p style="color: {% if 'error' in message %}red{% else %}green{% endif %}">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Upload Multiple Images</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .upload-container {
+            text-align: center;
+            padding: 20px;
+            cursor: pointer;
+        }
+
+        .upload-label {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .image-previews img {
+            max-width: 100px;
+            max-height: 100px;
+            margin: 5px;
+        }
+
+        #image-preview {
+            position: absolute;
+            width: 50%;
+            top: 150px;
+            left: 40px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .preview-image {
+            width: 150px;
+            height: 150px;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+        }
+
+        .preview-image:hover {
+            transform: scale(1.04);
+            box-shadow: 3px 5px 6px rgba(1, 1, 1, 0.3);
+            transition: 0.2s ease-in-out all;
+            border-radius: 20px;
+        }
+
+        #upload-input {
+            display: none;
+        }
+
+        #upload-button {
+            background-color: #3498db;
+            color: white;
+            padding: 20px 25px;
+            border: none;
+            /* border-radius: 50px; */
+            cursor: pointer;
+            position: absolute;
+            top: 30px;
+            left: 55px;
+        }
+
+        #finalUpload {
+            margin-left: 60px;
+            background-color: #3498db;
+            color: white;
+            padding: 20px 25px;
+            border: none;
+            /* border-radius: 50px; */
+            cursor: pointer;
+            position: absolute;
+            top: 80px;
+            left: 220px;
+        }
+
+        .bx {
+            font-size: larger;
+
+        }
+
+        #finalUpload:hover {
+            background-color: #1d618f;
+        }
+
+        #upload-button:hover {
+            background-color: #1d618f;
+        }
+
+        #create-video-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            position: fixed;
+            top: 45%;
+            right: 300px;
+            animation: glowAnimation 2s ease-in-out infinite alternate, blinkAnimation 1s infinite;
+        }
+
+        #create-video-btn:hover {
+            background-color: #1d618f;
+            animation: none;
+        }
+
+        #he4 {
+            position: fixed;
+            top: 43%;
+            right: 200px;
+        }
+
+        @media screen and (max-width: 800px) {
+            #he4 {
+                margin-left: 0px;
+                top: 1.5%;
+            }
+
+            #upload-button {
+                margin-top: 60px;
+            }
+
+            #create-video-btn {
+                margin-left: 20px;
+                top: 2%;
+            }
+
+            #upload-button {
+                width: 90px;
+                margin-left: 2px;
+            }
+
+            #upload-button pre {
+                font-size: 12px;
+            }
+
+            #image-preview {
+                margin-top: 60px;
+            }
+
+            #image-preview img {
+
+                max-width: 50px;
+                max-height: 50px;
+            }
+        }
+
+        @keyframes glowAnimation {
+            0% {
+                box-shadow: 0 0 10px #3498db;
+            }
+
+            100% {
+                box-shadow: 0 0 20px #3498db;
+            }
+        }
+
+        @keyframes blinkAnimation {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.8;
+            }
+        }
+
+        #ntright {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            padding: 15px;
+            /* margin-top: 0px; */
+        }
+
+        .logout {
+            padding: 7px;
+            background-color: #1d618f;
+            color: white;
+            border-radius: 5px;
+        }
+
+        #ntright :hover {
+            cursor: pointer;
+        }
+
+        #image-preview-container {
+            position: fixed;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 90%;
+            /* Adjust max-width as needed */
+            max-height: 50%;
+            /* Adjust max-height as needed */
+            overflow-y: auto;
+            background-color: #4fc5e2;
+            /* Adjust background color and opacity */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+
+<!-- Your HTML form code (index.html) -->
+
+<body
+style="position: relative; overflow: hidden; background-image:url('/static/images/upload_back.jpeg');background-size: cover;">
+
+<div class="logindiv">
+    <a id="ntright" href="{{ url_for('logout_and_delete') }}">
+        <button class='logout'>LOG OUT</button>
+    </a>
+</div>
+<form method="POST" enctype="multipart/form-data" id="upload-form">
+    <label for="upload-input" id="upload-button" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <i class='bx bx-plus-circle'> Browse</i>
+        <p style="color: black; font-weight: bold;"> (Drag here)</p>
+    </label>
+
+    <input type="file" id="upload-input" name="image" accept="image/*" multiple onchange="handleFileSelect(this)">
+    <button type="button" id="finalUpload" onclick="uploadFilesToFlask()">SAVE</button>
+</form>
+<div id="image-preview-container"></div>
+
+<!-- <a href="{{ url_for('video') }}">
+    <button id="create-video-btn"><i class='bx bxs-video-plus'></i></button>
+</a> -->
+
+<!-- <h4 id="he4">Upload Images</h4> -->
+
+<!-- Display flashed messages -->
+<!-- {% with messages = get_flashed_messages() %}
+{% if messages %}
+<div>
+    {% for message in messages %}
+    <p style="color: {% if 'error' in message %}red{% else %}green{% endif %}">{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %} -->
+
+<script>
+    
+    var uploadedFiles = []; // Global array to store uploaded file names
+    function allowDrop(event) {
+        event.preventDefault();
+    }
+
+    function dragEnter(event) {
+        event.preventDefault();
+        event.target.classList.add('highlight');
+    }
+
+    function dragLeave(event) {
+        event.preventDefault();
+        event.target.classList.remove('highlight');
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        const fileInput = document.getElementById('upload-input');
+        event.target.classList.remove('highlight');
+
+        const files = event.dataTransfer.files;
+        const previewContainer = document.getElementById('image-preview-container');
+
+        // Clear previous previews
+        // previewContainer.innerHTML = '';
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.classList.add('preview-image');
+                img.src = e.target.result;
+                previewContainer.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        // Trigger the handleFileSelect function
+        handleFileSelect(fileInput);
+    }
+
+    function handleFileSelect(fileInput) {
+        const files = fileInput.files;
+        const previewContainer = document.getElementById('image-preview-container');
+
+        // Clear previous previews
+        // previewContainer.innerHTML = '';
+
+        // Display image previews
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.classList.add('preview-image');
+                img.src = e.target.result;
+                previewContainer.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        // Store file names in the global array
+        uploadedFiles = Array.from(files).map(file => file.name);
+        console.log('Uploaded Image Names:', uploadedFiles);
+    }
+
+    // function allowDrop(event) {
+    //     event.preventDefault();
+    // }
+
+    // function drop(event) {
+    //     event.preventDefault();
+
+    //     const fileInput = document.getElementById('upload-input');
+
+    //     // Trigger the handleFileSelect function
+    //     handleFileSelect(fileInput);
+    // }
+
+    function uploadFilesToFlask() {
+        console.log("hello1");
+        // Send the file names to the Flask app using FormData and AJAX
+        // Send the file data directly to the Flask app using FormData and AJAX
+        var formData = new FormData();
+
+        // Append each file to the FormData object
+        uploadedFiles.forEach((fileName, index) => {
+            // console.log("hello2");
+            const fileInput = document.getElementById('upload-input');
+            const file = fileInput.files[index];
+            formData.append('image', file);
+        });
+        // console.log("hello3");
+
+        fetch('/upload_files', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())  // Parse the JSON response
+            .then(data => {
+                if (data.success) {
+                    console.log('Files uploaded successfully');
+                    // const token = data.token;
+                    const username = data.username;
+                    // Redirect to the user profile page with the token
+                    window.location.href = `/user_profile/${username}`;
+                } else {
+                    console.error('Error uploading files:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+</script>
+</body>
+
+
+</html>
+    {% endwith %} -->
+
+    <script>
+        
+        var uploadedFiles = []; // Global array to store uploaded file names
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function dragEnter(event) {
+            event.preventDefault();
+            event.target.classList.add('highlight');
+        }
+
+        function dragLeave(event) {
+            event.preventDefault();
+            event.target.classList.remove('highlight');
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('upload-input');
+            event.target.classList.remove('highlight');
+
+            const files = event.dataTransfer.files;
+            const previewContainer = document.getElementById('image-preview-container');
+
+            // Clear previous previews
+            // previewContainer.innerHTML = '';
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const img = document.createElement('img');
+                    img.classList.add('preview-image');
+                    img.src = e.target.result;
+                    previewContainer.appendChild(img);
+                };
+
+                reader.readAsDataURL(file);
+            }
+
+            // Trigger the handleFileSelect function
+            handleFileSelect(fileInput);
+        }
+
+        function handleFileSelect(fileInput) {
+            const files = fileInput.files;
+            const previewContainer = document.getElementById('image-preview-container');
+
+            // Clear previous previews
+            // previewContainer.innerHTML = '';
+
+            // Display image previews
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const img = document.createElement('img');
+                    img.classList.add('preview-image');
+                    img.src = e.target.result;
+                    previewContainer.appendChild(img);
+                };
+
+                reader.readAsDataURL(file);
+            }
+
+            // Store file names in the global array
+            uploadedFiles = Array.from(files).map(file => file.name);
+            console.log('Uploaded Image Names:', uploadedFiles);
+        }
+
+        // function allowDrop(event) {
+        //     event.preventDefault();
+        // }
+
+        // function drop(event) {
+        //     event.preventDefault();
+
+        //     const fileInput = document.getElementById('upload-input');
+
+        //     // Trigger the handleFileSelect function
+        //     handleFileSelect(fileInput);
+        // }
+
+        function uploadFilesToFlask() {
+            console.log("hello1");
+            // Send the file names to the Flask app using FormData and AJAX
+            // Send the file data directly to the Flask app using FormData and AJAX
+            var formData = new FormData();
+
+            // Append each file to the FormData object
+            uploadedFiles.forEach((fileName, index) => {
+                // console.log("hello2");
+                const fileInput = document.getElementById('upload-input');
+                const file = fileInput.files[index];
+                formData.append('image', file);
+            });
+            // console.log("hello3");
+
+            fetch('/upload_files', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())  // Parse the JSON response
+                .then(data => {
+                    if (data.success) {
+                        console.log('Files uploaded successfully');
+                        // const token = data.token;
+                        const username = data.username;
+                        // Redirect to the user profile page with the token
+                        window.location.href = `/user_profile/${username}`;
+                    } else {
+                        console.error('Error uploading files:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+    </script>
+</body>
+
+
+</html>
