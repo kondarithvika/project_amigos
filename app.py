@@ -39,29 +39,29 @@ app.config['UPLOAD_FOLDER'] = selected_img_folder_path  # Specify the path to yo
 #    'password': 'rithu2005',
 #    'database': 'amigos_project'
 # }
-def db_config():
-   conn=psycopg2.connect("postgresql://rithu:XLwR9lBbDvC7qUUArHTjcg@wide-panda-8901.8nk.gcp-asia-southeast1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full")
-   return conn
 # def db_config():
-#     # Decode the base64 certificate
-#     cert_decoded = base64.b64decode(os.environ['ROOT_CERT_BASE64'])
+#    conn=psycopg2.connect("postgresql://rithu:XLwR9lBbDvC7qUUArHTjcg@wide-panda-8901.8nk.gcp-asia-southeast1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full")
+#    return conn
+def db_config():
+    # Decode the base64 certificate
+    cert_decoded = base64.b64decode(os.environ['ROOT_CERT_BASE64'])
     
-#     # Define the path to save the certificate
-#     cert_path = '/opt/render/.postgresql/root.crt'
-#     os.makedirs(os.path.dirname(cert_path), exist_ok=True)
+    # Define the path to save the certificate
+    cert_path = '/opt/render/.postgresql/root.crt'
+    os.makedirs(os.path.dirname(cert_path), exist_ok=True)
     
-#     # Write the certificate to the file
-#     with open(cert_path, 'wb') as cert_file:
-#         cert_file.write(cert_decoded)
+    # Write the certificate to the file
+    with open(cert_path, 'wb') as cert_file:
+        cert_file.write(cert_decoded)
     
-#     # Set up the connection string with the path to the certificate
-#     conn = psycopg2.connect(
-#         "host=wide-panda-8901.8nk.gcp-asia-southeast1.cockroachlabs.cloud "
-#         "port=26257 dbname=defaultdb user=rithu "
-#         "password=XLwR9lBbDvC7qUUArHTjcg sslmode=verify-full "
-#         f"sslrootcert={cert_path}"
-#     )
-#     return conn
+    # Set up the connection string with the path to the certificate
+    conn = psycopg2.connect(
+        "host=wide-panda-8901.8nk.gcp-asia-southeast1.cockroachlabs.cloud "
+        "port=26257 dbname=defaultdb user=rithu "
+        "password=XLwR9lBbDvC7qUUArHTjcg sslmode=verify-full "
+        f"sslrootcert={cert_path}"
+    )
+    return conn
 
 def close_connection(conn):
   #  if conn.is_connected():
